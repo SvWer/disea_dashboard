@@ -23,7 +23,7 @@
 
 require_once(__DIR__ . '/../../config.php');
 
-global $DB, $USER, $COURSE;
+global $CFG, $PAGE, $OUTPUT;
 
 $PAGE->set_url(new moodle_url('/blocks/disea_dashboard/dashboard.php'));
 $PAGE->set_context(\context_system::instance());
@@ -33,7 +33,15 @@ $PAGE->set_title(get_string('pluginname', 'block_disea_dashboard'));
 $courseid = optional_param('id',NULL, PARAM_INT);
 
 
+$url = $CFG->wwwroot.'/course/view.php?id='.$courseid;
+$templatecontext = (object) [
+    'text' => get_string('back', 'block_disea_dashboard'),
+    'editurl' => $url
+];
+$footer = $OUTPUT->render_from_template('block_disea_dashboard/more_details', $templatecontext);
+
 
 echo $OUTPUT->header();
 echo '<p>Hello World</p>';
+echo $footer;
 echo $OUTPUT->footer();
