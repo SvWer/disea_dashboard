@@ -77,52 +77,58 @@ foreach ($results as $tuple) {
     }
 }
 
-/* Get the number of modules accessed by week */
-$accessresults = block_disea_dashboard_get_number_of_modules_access_by_week($courseid, $students, $startdate);
-
+// Chart with access to course per week
 $array = array_fill('0', $maxnumberofweeks, 0);
 $lalebs = range('0', $maxnumberofweeks);
 foreach ($results as $tuple) {
-    var_dump('Das ist ein test, damit ich die verschiedenen Variablen besser unterscheiden kann.!!');
-    var_dump('Das ist ein test, damit ich die verschiedenen Variablen besser unterscheiden kann.!!');
-    var_dump('Das ist ein test, damit ich die verschiedenen Variablen besser unterscheiden kann.!!');
-    var_dump('Das ist ein test, damit ich die verschiedenen Variablen besser unterscheiden kann.!!');
-    var_dump('Das ist ein test, damit ich die verschiedenen Variablen besser unterscheiden kann.!!');
-
     if($tuple->userid === $USER->id) {
         $array[$tuple->week] = intval($tuple->number);
     }
 }
-
-var_dump($array);
-var_dump($lalebs);
-
-
 $chart2 = new core\chart_line();
 $numbers = new core\chart_series('pageviews', $array);
-
 $chart2->add_series($numbers);
 $chart2->set_labels($lalebs);
 
+/* Get the number of modules accessed by week */
+$accessresults = block_disea_dashboard_get_number_of_modules_access_by_week($courseid, $students, $startdate);
+
+// Chart with access of modules per week
+$array2 = array_fill('0', $maxnumberofweeks, 0);
+$labels2 = range('0', $maxnumberofweeks-1);
+foreach ($accessresults as $tuple) {
+    if($tuple->userid === $USER->id) {
+        $array2[$tuple->week] = intval($tuple->number);
+    }
+}
+$chart3 = new core\chart_line();
+$numbers3 = new core\chart_series('module views', $array2);
+$chart3->add_series($numbers3);
+$chart3->set_labels($labels2);
 
 
-//var_dump($results);
-//var_dump($accessresults);
-var_dump('Das ist ein test, damit ich die verschiedenen Variablen besser unterscheiden kann.!!');
-//var_dump($results);
-//var_dump($students);
-
+//Testchart 3 just for fun
+$nums = new core\chart_series('numbers2', [1, 2, 6, 4, 5, 2, 7, 8, 5, 10, 1, 4, 7, 3]);
+$labs = array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14');
+$chart4 = new core\chart_line();
+$chart4->add_series($nums);
+$chart4->set_labels($labs);
 
 $url = $CFG->wwwroot.'/course/view.php?id='.$courseid;
 $templatecontext = (object) [
     'text' => get_string('back', 'block_disea_dashboard'),
     'editurl' => $url
 ];
-$footer = $OUTPUT->render_from_template('block_disea_dashboard/more_details', $templatecontext);
 
 
 echo $OUTPUT->header();
-echo '<p>Hello World</p>';
+echo $OUTPUT->heading('DiSEA Dashboard');
+echo '<div class="container"> <div class="row"> <div class="col">';
 echo $OUTPUT->render_chart($chart2);
-echo $footer;
+echo '</div>  <div class="col">';
+echo $OUTPUT->render_chart($chart3);
+echo '</div>  <div class="col">';
+echo $OUTPUT->render_chart($chart4);
+echo '</div> </div> </div>';
+echo $OUTPUT->render_from_template('block_disea_dashboard/more_details', $templatecontext);
 echo $OUTPUT->footer();
