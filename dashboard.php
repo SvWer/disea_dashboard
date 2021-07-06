@@ -64,6 +64,9 @@ foreach ($students as $tuple) {
         'email' => $tuple->email);
 }
 
+var_dump($students);
+var_dump($arrayofstudents);
+
 /* Get the number of days with access by week */
 $results = block_disea_dashboard_get_number_of_days_access_by_week($courseid, $students, $startdate);
 
@@ -80,29 +83,39 @@ foreach ($results as $tuple) {
 // Chart with access to course per week
 $access_weeks = array_fill('0', $maxnumberofweeks+1, 0);
 $access_weeks_label = range('0', $maxnumberofweeks);
-foreach ($results as $tuple) {
-    if($tuple->userid === $USER->id) {
-        $access_weeks[$tuple->week] = intval($tuple->number);
-    }
-}
-
-$access_weeks_chart = new core\chart_line();
-$numbers = new core\chart_series('Anzahl der Kursaufrufe pro Woche', $access_weeks);
-$access_weeks_chart->add_series($numbers);
-$access_weeks_chart->set_labels($access_weeks_label);
-
+$access_weeks_average = array_fill('0', $maxnumberofweeks+1, 0);
 //Chart with klicks in course per week
 $klicks = array_fill('0', $maxnumberofweeks+1, 0);
 $klick_label = range('0', $maxnumberofweeks);
+$klicks_average = array_fill('0', $maxnumberofweeks+1, 0);
 foreach ($results as $tuple) {
     if($tuple->userid === $USER->id) {
+        $access_weeks[$tuple->week] = intval($tuple->number);
         $klicks[$tuple->week] = intval($tuple->numberofpageviews);
     }
+    $access_weeks_average[$tuple->week] = $access_weeks_average[$tuple->week] + intval($tuple->number);
+    $klicks_average[$tuple->week] = $klicks_average[$tuple->week] + intval($tuple->numberofpageviews);
 }
 
+for ($i = 0; $i < count($access_weeks_average); $i++) {
+    $access_weeks_average[$i] = $access_weeks_average[$i]/count($students);
+    $klicks_average[$i] = $klicks_average[$i] / count($students);
+}
+
+// Chart with access to course per week
+$access_weeks_chart = new core\chart_line();
+$numbers = new core\chart_series('Anzahl der Kursaufrufe pro Woche', $access_weeks);
+$access_weeks_average_s = new core\chart_series('Durchschnitt Anzahl der Kursaufrufe', $access_weeks_average);
+$access_weeks_chart->add_series($numbers);
+$access_weeks_chart->add_series($access_weeks_average_s);
+$access_weeks_chart->set_labels($access_weeks_label);
+
+//Chart with klicks in course per week
 $klicks_chart = new core\chart_line();
 $klicks_s = new core\chart_series('Anzahl der Klicks im Kurs pro Woche', $klicks);
+$klicks_average_s = new core\chart_series('Durchschnitt Anzahl der Klicks pro Woche', $klicks_average);
 $klicks_chart->add_series($klicks_s);
+$klicks_chart->add_series($klicks_average_s);
 $klicks_chart->set_labels($klick_label);
 
 /* Get the number of modules accessed by week */
@@ -111,15 +124,28 @@ $accessresults = block_disea_dashboard_get_number_of_modules_access_by_week($cou
 // Chart with days of access of modules per week
 $module_access = array_fill('0', $maxnumberofweeks+1, 0);
 $module_access_label = range('0', $maxnumberofweeks);
+$module_access_average = array_fill('0', $maxnumberofweeks+1, 0);
 foreach ($accessresults as $tuple) {
     if($tuple->userid === $USER->id) {
         $module_access[$tuple->week] = intval($tuple->number);
     }
+    $module_access_average[$tuple->week] = $module_access_average[$tuple->week] + intval($tuple->number);
 }
+
+for ($i = 0; $i < count($module_access_average); $i++) {
+    $module_access_average[$i] = $module_access_average[$i]/count($students);
+}
+var_dump('##########################################');
+var_dump($module_access_average);
+var_dump('##########################################');
+var_dump($module_access_label);
+var_dump('##########################################');
 
 $module_access_chart = new core\chart_line();
 $module_access_s = new core\chart_series('Anzahl aufgerufener Aktivitaeten pro Woche', $module_access);
+$module_access_average_s = new core\chart_series('Durchschnitt Anzahl aufgerufener Aktivitaeten', $module_access_average);
 $module_access_chart->add_series($module_access_s);
+$module_access_chart->add_series($module_access_average_s);
 $module_access_chart->set_labels($module_access_label);
 
 //Testchart 3 just for fun
@@ -139,7 +165,8 @@ $diagrams = [
     (object)['d' => $OUTPUT->render_chart($access_weeks_chart, false)],  
     (object)['d' => $OUTPUT->render_chart($module_access_chart, false)],
     (object)['d' => $OUTPUT->render_chart($klicks_chart, false)], 
-    (object)['d' => $OUTPUT->render_chart($chart4, false)]];
+    (object)['d' => $OUTPUT->render_chart($chart4, false)]
+];
 
 $templatecontext_diagrams = (object) [
     'diagrams' => $diagrams,
