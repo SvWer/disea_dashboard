@@ -108,3 +108,19 @@ function block_disea_dashboard_get_number_of_modules_access_by_week($course, $st
     $results = $DB->get_records_sql($sql, $params);
     return($results);
 }
+
+function block_disea_dashboard_get_assignment_grades($course, $students) {
+    global $DB;
+    foreach ($students as $tupla) {
+        $inclause[] = $tupla->id;
+    }
+    list($insql, $inparams) = $DB->get_in_or_equal($inclause);
+    $params = array_merge(array($course), $inparams);
+    $sql = "SELECT qa.id, q.id as quizid, q.name, qa.userid, q.sumgrades as maxpoints, MAX(qa.sumgrades) as points, qa.timefinish
+        	FROM mdl_quiz q
+        	LEFT JOIN mdl_quiz_attempts qa on q.id = qa.quiz AND qa.state = 'finished'
+            WHERE q.course = ? 
+            GROUP BY q.id, qa.userid;";
+    $results = $DB->get_records_sql($sql, $params);
+    return($results);
+}

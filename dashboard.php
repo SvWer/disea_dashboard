@@ -64,9 +64,6 @@ foreach ($students as $tuple) {
         'email' => $tuple->email);
 }
 
-var_dump($students);
-var_dump($arrayofstudents);
-
 /* Get the number of days with access by week */
 $results = block_disea_dashboard_get_number_of_days_access_by_week($courseid, $students, $startdate);
 
@@ -104,16 +101,18 @@ for ($i = 0; $i < count($access_weeks_average); $i++) {
 
 // Chart with access to course per week
 $access_weeks_chart = new core\chart_line();
-$numbers = new core\chart_series('Anzahl der Kursaufrufe pro Woche', $access_weeks);
-$access_weeks_average_s = new core\chart_series('Durchschnitt Anzahl der Kursaufrufe', $access_weeks_average);
+$access_weeks_chart->set_title(get_string('access_weeks_chart_name', 'block_disea_dashboard'));
+$numbers = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $access_weeks);
+$access_weeks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $access_weeks_average);
 $access_weeks_chart->add_series($numbers);
 $access_weeks_chart->add_series($access_weeks_average_s);
 $access_weeks_chart->set_labels($access_weeks_label);
 
 //Chart with klicks in course per week
 $klicks_chart = new core\chart_line();
-$klicks_s = new core\chart_series('Anzahl der Klicks im Kurs pro Woche', $klicks);
-$klicks_average_s = new core\chart_series('Durchschnitt Anzahl der Klicks pro Woche', $klicks_average);
+$klicks_chart->set_title(get_string('klicks_chart_name', 'block_disea_dashboard'));
+$klicks_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $klicks);
+$klicks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $klicks_average);
 $klicks_chart->add_series($klicks_s);
 $klicks_chart->add_series($klicks_average_s);
 $klicks_chart->set_labels($klick_label);
@@ -135,23 +134,67 @@ foreach ($accessresults as $tuple) {
 for ($i = 0; $i < count($module_access_average); $i++) {
     $module_access_average[$i] = $module_access_average[$i]/count($students);
 }
-var_dump('##########################################');
-var_dump($module_access_average);
-var_dump('##########################################');
-var_dump($module_access_label);
-var_dump('##########################################');
 
 $module_access_chart = new core\chart_line();
-$module_access_s = new core\chart_series('Anzahl aufgerufener Aktivitaeten pro Woche', $module_access);
-$module_access_average_s = new core\chart_series('Durchschnitt Anzahl aufgerufener Aktivitaeten', $module_access_average);
+$module_access_chart->set_title(get_string('module_access_chart_name', 'block_disea_dashboard'));
+$module_access_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $module_access);
+$module_access_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $module_access_average);
 $module_access_chart->add_series($module_access_s);
 $module_access_chart->add_series($module_access_average_s);
 $module_access_chart->set_labels($module_access_label);
+
+//Chart for assignenment grades
+$assign_grades = block_disea_dashboard_get_assignment_grades($courseid, $students);
+
+$diffquizzes = array_unique(array_map(function ($i) { return $i->name; }, $assign_grades));
+$numberquizzes = count($diffquizzes);
+
+$max_pos_points = array_fill(0, $numberquizzes, 0);
+$assignment_average = array_fill(0, $numberquizzes, 0);
+$assignment_my = array_fill(0, $numberquizzes, 0);
+$succeded_assignments = array_fill(0, $numberquizzes, 0);
+$assignment_name = array();
+
+
+foreach ($assign_grades as $tuple) {
+    if(in_array($tuple->name, $assignment_name)) {
+        $index = array_search($tuple->name, $assignment_name);
+        $assignment_average[$index] = $assignment_average[$index] + $tuple->points;
+        $succeded_assignments[$index] += 1;
+        if($tuple->userid === $USER->id) {
+            $assignment_my[$index] = $tuple->points;
+        }
+    } else {
+        array_push($assignment_name, $tuple->name);
+        $index = array_search($tuple->name, $assignment_name);
+        $max_pos_points[$index] = $tuple->maxpoints;
+        $assignment_average[$index] = $tuple->points;
+        $succeded_assignments[$index] += 1;
+        if($tuple->userid === $USER->id) {
+            $assignment_my[$index] = $tuple->points;
+        }
+    }
+}
+for ($i = 0; $i < count($assignment_average); $i++) {
+    $assignment_average[$i] = $assignment_average[$i]/$succeded_assignments[$i];
+}
+
+$assignment_chart = new core\chart_bar();
+$assignment_chart->set_title(get_string('assignment_chart_name', 'block_disea_dashboard'));
+$assignment_my_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $assignment_my);
+$assignment_chart->add_series($assignment_my_s);
+$assignment_max_s = new core\chart_series(get_string('assignment_max', 'block_disea_dashboard'), $max_pos_points);
+$assignment_chart->add_series($assignment_max_s);
+$assignment_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $assignment_average);
+$assignment_chart->add_series($assignment_average_s);
+$assignment_chart->set_labels($assignment_name);
+
 
 //Testchart 3 just for fun
 $nums = new core\chart_series('Random Stuff', [1, 2, 6, 4, 5, 2, 7, 8, 5, 10, 1, 4, 7, 3]);
 $labs = array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14');
 $chart4 = new core\chart_line();
+$chart4->set_smooth(true);
 $chart4->add_series($nums);
 $chart4->set_labels($labs);
 
@@ -165,7 +208,8 @@ $diagrams = [
     (object)['d' => $OUTPUT->render_chart($access_weeks_chart, false)],  
     (object)['d' => $OUTPUT->render_chart($module_access_chart, false)],
     (object)['d' => $OUTPUT->render_chart($klicks_chart, false)], 
-    (object)['d' => $OUTPUT->render_chart($chart4, false)]
+    (object)['d' => $OUTPUT->render_chart($chart4, false)],
+    (object)['d' => $OUTPUT->render_chart($assignment_chart, false)]
 ];
 
 $templatecontext_diagrams = (object) [
