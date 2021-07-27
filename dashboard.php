@@ -14,6 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/*
+ * This is an index of the differend diagrams, so that you know, which 
+ * diagram contains to which ID in the database
+ * 1 = access per week
+ * 2 = klicks in course
+ * 3 = accessed modules
+ * 4 = assignment grades
+ * 5 = 
+ * 6 = 
+ * 6 = 
+ * 7 = 
+ * 8 = 
+ * 9 = 
+ * 
+ */
+
+
+
+
 /**
  * Strings for component 'block_disea_dashboard'
  *
@@ -22,22 +41,30 @@
  */
 
 require_once(__DIR__ . '/../../config.php');
+require_once($CFG->dirroot . '/blocks/disea_dashboard/classes/form/remove_and_compare_form.php');
 require('lib.php');
 
-global $CFG, $PAGE, $OUTPUT, $USER;
-
-$PAGE->set_url(new moodle_url('/blocks/disea_dashboard/dashboard.php'));
-$PAGE->set_context(\context_system::instance());
-$PAGE->set_title(get_string('pluginname', 'block_disea_dashboard'));
+global $CFG, $PAGE, $OUTPUT, $USER, $DB;
 
 //Get Course ID from url to be able to redirect
 $courseid = optional_param('id',NULL, PARAM_INT);
 $startdate = optional_param('from', '***', PARAM_TEXT);
 
+$PAGE->set_url(new moodle_url('/blocks/disea_dashboard/dashboard.php', array('id' => $courseid)));
+$PAGE->set_context(\context_system::instance());
+$PAGE->set_title(get_string('pluginname', 'block_disea_dashboard'));
+
+
+
 /* Access control */
 require_login($courseid);
-$context = context_course::instance($courseid);
 
+$check_diagrams = $DB->get_records('disea_diagrams', array('userid' => $USER->id));
+$list_diagrams = array();
+foreach ($check_diagrams as $dia) {
+    $list_diagrams[] = $dia->diagram;
+}
+$diagrams = [];
 /*
  * The following code is from the moodle plugin analytics graphs
  */
@@ -77,6 +104,7 @@ foreach ($results as $tuple) {
     }
 }
 
+
 // Chart with access to course per week
 $access_weeks = array_fill('0', $maxnumberofweeks+1, 0);
 $access_weeks_label = range('0', $maxnumberofweeks);
@@ -98,96 +126,149 @@ for ($i = 0; $i < count($access_weeks_average); $i++) {
     $access_weeks_average[$i] = $access_weeks_average[$i]/count($students);
     $klicks_average[$i] = $klicks_average[$i] / count($students);
 }
+$thisurl = $CFG->wwwroot.'/blocks/disea_dashboard/dashboard.php?id='.$courseid;
 
-// Chart with access to course per week
-$access_weeks_chart = new core\chart_line();
-$access_weeks_chart->set_title(get_string('access_weeks_chart_name', 'block_disea_dashboard'));
-$numbers = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $access_weeks);
-$access_weeks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $access_weeks_average);
-$access_weeks_chart->add_series($numbers);
-$access_weeks_chart->add_series($access_weeks_average_s);
-$access_weeks_chart->set_labels($access_weeks_label);
-
-//Chart with klicks in course per week
-$klicks_chart = new core\chart_line();
-$klicks_chart->set_title(get_string('klicks_chart_name', 'block_disea_dashboard'));
-$klicks_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $klicks);
-$klicks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $klicks_average);
-$klicks_chart->add_series($klicks_s);
-$klicks_chart->add_series($klicks_average_s);
-$klicks_chart->set_labels($klick_label);
-
-/* Get the number of modules accessed by week */
-$accessresults = block_disea_dashboard_get_number_of_modules_access_by_week($courseid, $students, $startdate);
-
-// Chart with days of access of modules per week
-$module_access = array_fill('0', $maxnumberofweeks+1, 0);
-$module_access_label = range('0', $maxnumberofweeks);
-$module_access_average = array_fill('0', $maxnumberofweeks+1, 0);
-foreach ($accessresults as $tuple) {
-    if($tuple->userid === $USER->id) {
-        $module_access[$tuple->week] = intval($tuple->number);
+if(!in_array(1, $list_diagrams)) {
+    // Chart with access to course per week
+    $access_weeks_chart = new core\chart_line();
+    $access_weeks_chart->set_title(get_string('access_weeks_chart_name', 'block_disea_dashboard'));
+    $numbers = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $access_weeks);
+    $access_weeks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $access_weeks_average);
+    $access_weeks_chart->add_series($numbers);
+    $access_weeks_chart->add_series($access_weeks_average_s);
+    $access_weeks_chart->set_labels($access_weeks_label);
+    $mform = new remove_and_compare_form($thisurl);
+    $mform->set_data((object)array('diagram'=> 1));
+    if ($fromform = $mform->get_data()){
+        $di = $_POST ['diagram'];
+        $recordtoinsert = new stdClass();
+        $recordtoinsert->userid = $USER->id;
+        $recordtoinsert->diagram = $di;
+        $DB->insert_record('disea_diagrams', $recordtoinsert);
+        redirect($thisurl);
     }
-    $module_access_average[$tuple->week] = $module_access_average[$tuple->week] + intval($tuple->number);
+    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($access_weeks_chart, false), 'b' => $mform->render()]);
+    //array_push($diagrams, (object)['d' => $mform->render()]);
+}
+if(!in_array(2, $list_diagrams)) {
+    //Chart with klicks in course per week
+    $klicks_chart = new core\chart_line();
+    $klicks_chart->set_title(get_string('klicks_chart_name', 'block_disea_dashboard'));
+    $klicks_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $klicks);
+    $klicks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $klicks_average);
+    $klicks_chart->add_series($klicks_s);
+    $klicks_chart->add_series($klicks_average_s);
+    $klicks_chart->set_labels($klick_label);
+    $mform = new remove_and_compare_form($thisurl);
+    $mform->set_data((object)array('diagram'=> 2));
+    if ($fromform = $mform->get_data()){
+        $di = $_POST ['diagram'];
+        $recordtoinsert = new stdClass();
+        $recordtoinsert->userid = $USER->id;
+        $recordtoinsert->diagram = $di;
+        $DB->insert_record('disea_diagrams', $recordtoinsert);
+        redirect($thisurl);
+    }
+    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($klicks_chart, false), 'b' => $mform->render()]);
 }
 
-for ($i = 0; $i < count($module_access_average); $i++) {
-    $module_access_average[$i] = $module_access_average[$i]/count($students);
-}
-
-$module_access_chart = new core\chart_line();
-$module_access_chart->set_title(get_string('module_access_chart_name', 'block_disea_dashboard'));
-$module_access_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $module_access);
-$module_access_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $module_access_average);
-$module_access_chart->add_series($module_access_s);
-$module_access_chart->add_series($module_access_average_s);
-$module_access_chart->set_labels($module_access_label);
-
-//Chart for assignenment grades
-$assign_grades = block_disea_dashboard_get_assignment_grades($courseid, $students);
-
-$diffquizzes = array_unique(array_map(function ($i) { return $i->name; }, $assign_grades));
-$numberquizzes = count($diffquizzes);
-
-$max_pos_points = array_fill(0, $numberquizzes, 0);
-$assignment_average = array_fill(0, $numberquizzes, 0);
-$assignment_my = array_fill(0, $numberquizzes, 0);
-$succeded_assignments = array_fill(0, $numberquizzes, 0);
-$assignment_name = array();
-
-
-foreach ($assign_grades as $tuple) {
-    if(in_array($tuple->name, $assignment_name)) {
-        $index = array_search($tuple->name, $assignment_name);
-        $assignment_average[$index] = $assignment_average[$index] + $tuple->points;
-        $succeded_assignments[$index] += 1;
+if(!in_array(3, $list_diagrams)) {
+    /* Get the number of modules accessed by week */
+    $accessresults = block_disea_dashboard_get_number_of_modules_access_by_week($courseid, $students, $startdate);
+    
+    // Chart with days of access of modules per week
+    $module_access = array_fill('0', $maxnumberofweeks+1, 0);
+    $module_access_label = range('0', $maxnumberofweeks);
+    $module_access_average = array_fill('0', $maxnumberofweeks+1, 0);
+    foreach ($accessresults as $tuple) {
         if($tuple->userid === $USER->id) {
-            $assignment_my[$index] = $tuple->points;
+            $module_access[$tuple->week] = intval($tuple->number);
         }
-    } else {
-        array_push($assignment_name, $tuple->name);
-        $index = array_search($tuple->name, $assignment_name);
-        $max_pos_points[$index] = $tuple->maxpoints;
-        $assignment_average[$index] = $tuple->points;
-        $succeded_assignments[$index] += 1;
-        if($tuple->userid === $USER->id) {
-            $assignment_my[$index] = $tuple->points;
+        $module_access_average[$tuple->week] = $module_access_average[$tuple->week] + intval($tuple->number);
+    }
+    
+    for ($i = 0; $i < count($module_access_average); $i++) {
+        $module_access_average[$i] = $module_access_average[$i]/count($students);
+    }
+    
+    $module_access_chart = new core\chart_line();
+    $module_access_chart->set_title(get_string('module_access_chart_name', 'block_disea_dashboard'));
+    $module_access_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $module_access);
+    $module_access_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $module_access_average);
+    $module_access_chart->add_series($module_access_s);
+    $module_access_chart->add_series($module_access_average_s);
+    $module_access_chart->set_labels($module_access_label);
+    $mform = new remove_and_compare_form($thisurl);
+    $mform->set_data((object)array('diagram'=> 3));
+    if ($fromform = $mform->get_data()){
+        $di = $_POST ['diagram'];
+        $recordtoinsert = new stdClass();
+        $recordtoinsert->userid = $USER->id;
+        $recordtoinsert->diagram = $di;
+        $DB->insert_record('disea_diagrams', $recordtoinsert);
+        redirect($thisurl);
+    }
+    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($module_access_chart, false), 'b' => $mform->render()]);
+}
+
+if(!in_array(4, $list_diagrams)) {
+    //Chart for assignenment grades
+    $assign_grades = block_disea_dashboard_get_assignment_grades($courseid, $students);
+    
+    $diffquizzes = array_unique(array_map(function ($i) { return $i->name; }, $assign_grades));
+    $numberquizzes = count($diffquizzes);
+    
+    $max_pos_points = array_fill(0, $numberquizzes, 0);
+    $assignment_average = array_fill(0, $numberquizzes, 0);
+    $assignment_my = array_fill(0, $numberquizzes, 0);
+    $succeded_assignments = array_fill(0, $numberquizzes, 0);
+    $assignment_name = array();
+    
+    
+    foreach ($assign_grades as $tuple) {
+        if(in_array($tuple->name, $assignment_name)) {
+            $index = array_search($tuple->name, $assignment_name);
+            $assignment_average[$index] = $assignment_average[$index] + $tuple->points;
+            $succeded_assignments[$index] += 1;
+            if($tuple->userid === $USER->id) {
+                $assignment_my[$index] = $tuple->points;
+            }
+        } else {
+            array_push($assignment_name, $tuple->name);
+            $index = array_search($tuple->name, $assignment_name);
+            $max_pos_points[$index] = $tuple->maxpoints;
+            $assignment_average[$index] = $tuple->points;
+            $succeded_assignments[$index] += 1;
+            if($tuple->userid === $USER->id) {
+                $assignment_my[$index] = $tuple->points;
+            }
         }
     }
+    for ($i = 0; $i < count($assignment_average); $i++) {
+        $assignment_average[$i] = $assignment_average[$i]/$succeded_assignments[$i];
+    }
+    
+    $assignment_chart = new core\chart_bar();
+    $assignment_chart->set_title(get_string('assignment_chart_name', 'block_disea_dashboard'));
+    $assignment_my_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $assignment_my);
+    $assignment_chart->add_series($assignment_my_s);
+    $assignment_max_s = new core\chart_series(get_string('assignment_max', 'block_disea_dashboard'), $max_pos_points);
+    $assignment_chart->add_series($assignment_max_s);
+    $assignment_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $assignment_average);
+    $assignment_chart->add_series($assignment_average_s);
+    $assignment_chart->set_labels($assignment_name);
+    $mform = new remove_and_compare_form($thisurl);
+    $mform->set_data((object)array('diagram'=> 4));
+    if ($fromform = $mform->get_data()){
+        $di = $_POST ['diagram'];
+        $recordtoinsert = new stdClass();
+        $recordtoinsert->userid = $USER->id;
+        $recordtoinsert->diagram = $di;
+        $DB->insert_record('disea_diagrams', $recordtoinsert);
+        redirect($thisurl);
+    }
+    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($assignment_chart, false), 'b' => $mform->render()]);
 }
-for ($i = 0; $i < count($assignment_average); $i++) {
-    $assignment_average[$i] = $assignment_average[$i]/$succeded_assignments[$i];
-}
-
-$assignment_chart = new core\chart_bar();
-$assignment_chart->set_title(get_string('assignment_chart_name', 'block_disea_dashboard'));
-$assignment_my_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $assignment_my);
-$assignment_chart->add_series($assignment_my_s);
-$assignment_max_s = new core\chart_series(get_string('assignment_max', 'block_disea_dashboard'), $max_pos_points);
-$assignment_chart->add_series($assignment_max_s);
-$assignment_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $assignment_average);
-$assignment_chart->add_series($assignment_average_s);
-$assignment_chart->set_labels($assignment_name);
 
 
 //Testchart 3 just for fun
@@ -197,6 +278,7 @@ $chart4 = new core\chart_line();
 $chart4->set_smooth(true);
 $chart4->add_series($nums);
 $chart4->set_labels($labs);
+array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($chart4, false), 'b' => $mform->render()]);
 
 $url = $CFG->wwwroot.'/course/view.php?id='.$courseid;
 $templatecontext = (object) [
@@ -204,13 +286,14 @@ $templatecontext = (object) [
     'editurl' => $url
 ];
 
-$diagrams = [
-    (object)['d' => $OUTPUT->render_chart($access_weeks_chart, false)],  
-    (object)['d' => $OUTPUT->render_chart($module_access_chart, false)],
-    (object)['d' => $OUTPUT->render_chart($klicks_chart, false)], 
-    (object)['d' => $OUTPUT->render_chart($chart4, false)],
-    (object)['d' => $OUTPUT->render_chart($assignment_chart, false)]
-];
+
+// $diagrams = [
+//     (object)['d' => $OUTPUT->render_chart($access_weeks_chart, false)],  
+//     (object)['d' => $OUTPUT->render_chart($module_access_chart, false)],
+//     (object)['d' => $OUTPUT->render_chart($klicks_chart, false)], 
+//     (object)['d' => $OUTPUT->render_chart($chart4, false)],
+//     (object)['d' => $OUTPUT->render_chart($assignment_chart, false)]
+// ];
 
 $templatecontext_diagrams = (object) [
     'diagrams' => $diagrams,
@@ -222,3 +305,6 @@ echo $OUTPUT->heading('DiSEA Dashboard');
 echo $OUTPUT->render_from_template('block_disea_dashboard/diagrams', $templatecontext_diagrams);
 echo $OUTPUT->render_from_template('block_disea_dashboard/more_details', $templatecontext);
 echo $OUTPUT->footer();
+
+
+

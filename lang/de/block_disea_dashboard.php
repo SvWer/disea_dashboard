@@ -15,3 +15,4 @@ $string['klicks_chart_name'] = 'Anzahl der Klicks im Kurs pro Woche';
 $string['module_access_chart_name'] = 'Anzahl der aufgerufener Aktivit&auml;ten pro Woche';
 $string['assignment_chart_name'] = 'Punkte bei Tests';
 $string['assignment_max'] = 'Maximale Punktzahl bei Test';
+$string['remove'] = 'Vom Dashboard entfernen';

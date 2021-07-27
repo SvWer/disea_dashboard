@@ -3,9 +3,6 @@ class block_disea_dashboard extends block_base {
     
     public function init() {
         $this->title = get_string('disea_dashboard', 'block_disea_dashboard');
-        global $DB;
-        //$this->instance->defaultregion = BLOCK_POS_LEFT;
-        //$DB->update_record('block_instances', $this->instance);
     }
     
     function specialization() {
