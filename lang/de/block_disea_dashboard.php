@@ -16,3 +16,5 @@ $string['module_access_chart_name'] = 'Anzahl der aufgerufener Aktivit&auml;ten 
 $string['assignment_chart_name'] = 'Punkte bei Tests';
 $string['assignment_max'] = 'Maximale Punktzahl bei Test';
 $string['remove'] = 'Vom Dashboard entfernen';
+$string['add_dashboard'] = 'F&uuml;ge Diagramme hinzu';
+$string['back_to_dashboard'] = 'Zur&uuml;ck zum Dashboard';

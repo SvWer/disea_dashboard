@@ -10,7 +10,7 @@
 
 require_once("$CFG->libdir/formslib.php");
 
-class remove_and_compare_form extends moodleform {
+class add_diagram_form extends moodleform {
     
     function definition() {
         global $CFG;
@@ -21,7 +21,7 @@ class remove_and_compare_form extends moodleform {
         $mform->addElement('hidden', 'diagram', $diagram);
         $mform->setType('diagram', PARAM_INTEGER);
         $mform->setDefault('diagram', $diagram);
-        $buttonarray[] = $mform->createElement('submit', 'submitbutton', get_string('remove','block_disea_dashboard'));
+        $buttonarray[] = $mform->createElement('submit', 'submitbutton', get_string('add_dashboard','block_disea_dashboard'));
         $mform->addGroup($buttonarray, 'buttonar','',' ',false);
     }                           // Close the function
 }                               // Close the class

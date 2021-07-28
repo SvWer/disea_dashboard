@@ -8,7 +8,34 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="diagram" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram1" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram11" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram12" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram13" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram14" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram15" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram16" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram2" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram21" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram22" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram23" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram24" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram25" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram26" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram3" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram31" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram32" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram33" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram34" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram35" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram36" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram4" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram41" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram42" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram43" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram44" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram5" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="diagram6" TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
       	<KEY NAME="primary" TYPE="primary" FIELDS="id"/>

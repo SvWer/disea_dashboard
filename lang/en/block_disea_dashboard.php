@@ -17,3 +17,5 @@ $string['assignment_chart_name'] = 'Assignment Points';
 $string['assignment_max'] = 'Maximal assignment points';
 
 $string['remove'] = 'Remove from Dashboard';
+$string['add_dashboard'] = 'Add Diagrams';
+$string['back_to_dashboard'] = 'Back to dashboard';
