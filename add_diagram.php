@@ -36,9 +36,11 @@ $PAGE->set_context(\context_system::instance());
 $PAGE->set_title(get_string('pluginname', 'block_disea_dashboard'));
 
 $dashurl = $CFG->wwwroot.'/blocks/disea_dashboard/dashboard.php?id='.$courseid;
+$thisurl = $CFG->wwwroot.'/blocks/disea_dashboard/add_diagram.php?id='.$courseid;
 
 $check_diagrams = $DB->get_records('disea_diagrams', array('userid' => $USER->id));
-$check_diagrams = $check_diagrams[1];
+$check_diagrams = array_values($check_diagrams);
+$check_diagrams = $check_diagrams[0];
 $diagrams = [];
 
 $courseparams = get_course($courseid);
@@ -98,7 +100,7 @@ if($check_diagrams->diagram1 == 0) {
     $access_weeks_chart->add_series($numbers);
     $access_weeks_chart->add_series($access_weeks_average_s);
     $access_weeks_chart->set_labels($access_weeks_label);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 1));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -122,7 +124,7 @@ if($check_diagrams->diagram11 == 0) {
     $access_weeks_chart->add_series($access_weeks_average_s);
     $access_weeks_chart->set_labels($access_weeks_label);
     $access_weeks_chart->set_smooth(true);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 11));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -142,7 +144,7 @@ if($check_diagrams->diagram12 == 0) {
     $access_weeks_chart->add_series($numbers);
     $access_weeks_chart->add_series($access_weeks_average_s);
     $access_weeks_chart->set_labels($access_weeks_label);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 12));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -163,7 +165,7 @@ if($check_diagrams->diagram13 == 0) {
     $access_weeks_chart->add_series($access_weeks_average_s);
     $access_weeks_chart->set_labels($access_weeks_label);
     $access_weeks_chart->set_stacked(true);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 13));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -184,7 +186,7 @@ if($check_diagrams->diagram14 == 0) {
     $access_weeks_chart->add_series($access_weeks_average_s);
     $access_weeks_chart->set_labels($access_weeks_label);
     $access_weeks_chart->set_horizontal(true);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 14));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -204,7 +206,7 @@ if($check_diagrams->diagram15 == 0) {
     $access_weeks_chart->add_series($numbers);
     //$access_weeks_chart->add_series($access_weeks_average_s);
     $access_weeks_chart->set_labels($access_weeks_label);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 15));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -225,7 +227,7 @@ if($check_diagrams->diagram16 == 0) {
     $access_weeks_chart->add_series($access_weeks_average_s);
     $access_weeks_chart->set_labels($access_weeks_label);
     //$access_weeks_chart->set_doughnut(true);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 16));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -250,7 +252,7 @@ if($check_diagrams->diagram2 == 0) {
     $klicks_chart->add_series($klicks_s);
     $klicks_chart->add_series($klicks_average_s);
     $klicks_chart->set_labels($klick_label);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 2));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -275,7 +277,7 @@ if($check_diagrams->diagram21 == 0) {
     $klicks_chart->add_series($klicks_average_s);
     $klicks_chart->set_labels($klick_label);
     $klicks_chart->set_smooth(true);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 21));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -295,7 +297,7 @@ if($check_diagrams->diagram22 == 0) {
     $klicks_chart->add_series($klicks_s);
     $klicks_chart->add_series($klicks_average_s);
     $klicks_chart->set_labels($klick_label);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 22));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -316,7 +318,7 @@ if($check_diagrams->diagram23 == 0) {
     $klicks_chart->add_series($klicks_average_s);
     $klicks_chart->set_labels($klick_label);
     $klicks_chart->set_stacked(true);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 23));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -337,7 +339,7 @@ if($check_diagrams->diagram24 == 0) {
     $klicks_chart->add_series($klicks_average_s);
     $klicks_chart->set_labels($klick_label);
     $klicks_chart->set_horizontal(true);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 24));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -358,7 +360,7 @@ if($check_diagrams->diagram25 == 0) {
     $klicks_chart->add_series($klicks_s);
     //$klicks_chart->add_series($klicks_average_s);
     $klicks_chart->set_labels($klick_label);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 25));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -380,7 +382,7 @@ if($check_diagrams->diagram26 == 0) {
     $klicks_chart->add_series($klicks_average_s);
     $klicks_chart->set_labels($klick_label);
     //$klicks_chart->set_doughnut(true);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 26));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -462,7 +464,7 @@ if($check_diagrams->diagram31 == 0) {
     $module_access_chart->add_series($module_access_average_s);
     $module_access_chart->set_labels($module_access_label);
     $module_access_chart->set_smooth(true);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 31));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -499,7 +501,7 @@ if($check_diagrams->diagram32 == 0) {
     $module_access_chart->add_series($module_access_s);
     $module_access_chart->add_series($module_access_average_s);
     $module_access_chart->set_labels($module_access_label);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 32));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -537,7 +539,7 @@ if($check_diagrams->diagram33 == 0) {
     $module_access_chart->add_series($module_access_average_s);
     $module_access_chart->set_labels($module_access_label);
     $module_access_chart->set_stacked(true);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 33));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -575,7 +577,7 @@ if($check_diagrams->diagram34 == 0) {
     $module_access_chart->add_series($module_access_average_s);
     $module_access_chart->set_labels($module_access_label);
     $module_access_chart->set_horizontal(true);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 34));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -612,7 +614,7 @@ if($check_diagrams->diagram35 == 0) {
     $module_access_chart->add_series($module_access_s);
     //$module_access_chart->add_series($module_access_average_s);
     $module_access_chart->set_labels($module_access_label);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 35));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -650,7 +652,7 @@ if($check_diagrams->diagram36 == 0) {
     $module_access_chart->add_series($module_access_average_s);
     $module_access_chart->set_labels($module_access_label);
     //$module_access_chart->set_doughnut(true);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 36));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -711,7 +713,7 @@ if($check_diagrams->diagram4 == 0) {
     $assignment_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $assignment_average);
     $assignment_chart->add_series($assignment_average_s);
     $assignment_chart->set_labels($assignment_name);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 4));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -772,7 +774,7 @@ if($check_diagrams->diagram41 == 0) {
     $assignment_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $assignment_average);
     $assignment_chart->add_series($assignment_average_s);
     $assignment_chart->set_labels($assignment_name);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 41));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -830,7 +832,7 @@ if($check_diagrams->diagram42 == 0) {
     $assignment_chart->add_series($assignment_average_s);
     $assignment_chart->set_labels($assignment_name);
     $assignment_chart->set_smooth(true);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 42));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -888,7 +890,7 @@ if($check_diagrams->diagram43 == 0) {
     $assignment_chart->add_series($assignment_average_s);
     $assignment_chart->set_labels($assignment_name);
     $assignment_chart->set_stacked(true);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 43));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -946,7 +948,7 @@ if($check_diagrams->diagram44 == 0) {
     $assignment_chart->add_series($assignment_average_s);
     $assignment_chart->set_labels($assignment_name);
     $assignment_chart->set_horizontal(true);
-    $mform = new add_diagram_form($dashurl);
+    $mform = new add_diagram_form($thisurl);
     $mform->set_data((object)array('diagram'=> 44));
     if ($fromform = $mform->get_data()){
         $di = $_POST ['diagram'];
@@ -966,9 +968,9 @@ $templatecontext = (object) [
     'text' => get_string('back', 'block_disea_dashboard'),
     'editurl' => $url
 ];
-$addurl = new moodle_url('/blocks/disea_dashboard/add_diagram.php', array('id' => $PAGE->course->id));
+
 $templatecontext2 = (object) [
-    'editurl' => $addurl,
+    'editurl' => $dashurl,
     'text' => get_string('back_to_dashboard', 'block_disea_dashboard')
 ];
 

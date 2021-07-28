@@ -88,36 +88,36 @@ if(!$check_diagrams) {
     $newrecord->diagram1 = 1;
     $newrecord->diagram11 = 1;
     $newrecord->diagram12 = 1;
-    $newrecord->diagram13 = 1;
+    $newrecord->diagram13 = 0;
     $newrecord->diagram14 = 1;
     $newrecord->diagram15 = 0;
     $newrecord->diagram16 = 0;
     $newrecord->diagram2 = 1;
     $newrecord->diagram21 = 1;
     $newrecord->diagram22 = 1;
-    $newrecord->diagram23 = 1;
+    $newrecord->diagram23 = 0;
     $newrecord->diagram24 = 1;
     $newrecord->diagram25 = 0;
     $newrecord->diagram26 = 0;
     $newrecord->diagram3 = 1;
     $newrecord->diagram31 = 1;
     $newrecord->diagram32 = 1;
-    $newrecord->diagram33 = 1;
+    $newrecord->diagram33 = 0;
     $newrecord->diagram34 = 1;
     $newrecord->diagram35 = 0;
     $newrecord->diagram36 = 0;
     $newrecord->diagram4 = 1;
-    $newrecord->diagram41 = 1;
-    $newrecord->diagram42 = 1;
-    $newrecord->diagram43 = 1;
+    $newrecord->diagram41 = 0;
+    $newrecord->diagram42 = 0;
+    $newrecord->diagram43 = 0;
     $newrecord->diagram44 = 1;
     $newrecord->diagram5 = 0;
     $newrecord->diagram6 = 0;
     $DB->insert_record('disea_diagrams', $newrecord);
     $check_diagrams = $DB->get_records('disea_diagrams', array('userid' => $USER->id));
 }
-
-$check_diagrams = $check_diagrams[1];
+$check_diagrams = array_values($check_diagrams);
+$check_diagrams = $check_diagrams[0];
 $diagrams = [];
 
 /*
