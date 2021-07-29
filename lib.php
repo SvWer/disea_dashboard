@@ -124,3 +124,68 @@ function block_disea_dashboard_get_assignment_grades($course, $students) {
     $results = $DB->get_records_sql($sql, $params);
     return($results);
 }
+
+/**
+ * This funktion should be able to create different types of diagrams with min 1 data series and max 3 data series.
+ * It also creates a form für deleting or adding the diagram from/to the dashboard.
+ * @Param array &$ds for the finished diagrams with buttons
+ * @Param int $chart type of the chart as string (bar, stacked, horizontal, line, smooth, pie, doughnut)
+ * @Param string $title The title of the diagram
+ * @Param array $labels An Array with all the labels for the diagram
+ * @Param int $fieldnr Number that is equivalet to database field name
+ * @Param string $url The link to with you will be redirected, when you delete or add the diagram
+ * @Param mixed $form Object of the form for the add/remove button
+ * @Param mixed &$d_obj Object from database which contains values if diagrams should be displayed or not for the student
+ * @Param mixed &$d_obj_field The specific field which should be used for this diagram
+ * @Param int $value 0 or 1 depending on if diagram should be displayed (1) or not (0)
+ * @Param string $s1_t Name of the first series
+ * @Param array $s1_d Data of the first series
+ * @Param string $s2_t [optional] Name of the second series
+ * @Param array $s2_d [optional] Data of the second series
+ * @Param string $s3_t [optional] Name of the third series
+ * @Param array $s3_d [optional] Data of the third series
+ */
+function create_diagram (&$ds, $chart, $title, $labels, $fieldnr, $url, $form, $d_obj, $d_obj_field, $value, $s1_t, $s1_d, $s2_t=NULL, $s2_d=NULL, $s3_t=NULL, $s3_d=NULL) {
+    global $DB, $OUTPUT;
+    if($chart === 'bar') {
+        $c = new core\chart_bar();
+    } else if ($chart === 'stacked') {
+        $c = new core\chart_bar();
+        $c->set_stacked(true);
+    } else if ($chart === 'horizontal') {
+        $c = new core\chart_bar();
+        $c->set_horizontal(true);
+    } else if ($chart === 'line') {
+        $c = new core\chart_line();
+    } else if ($chart === 'smooth') {
+        $c = new core\chart_line();
+        $c->set_smooth(true);
+    } else if ($chart === 'pie') {
+        $c = new core\chart_pie();
+    } else if ($chart === 'doughnut') {
+        $c = new core\chart_pie();
+        $c->set_doughnut(true);
+    }
+    $c->set_title($title);
+    $c->set_labels($labels);
+    $s1 = new core\chart_series($s1_t, $s1_d);
+    $c->add_series($s1);
+    if($s2_t) {
+        $s2 = new core\chart_series($s2_t, $s2_d);
+        $c->add_series($s2);
+    }
+    if($s3_t) {
+        $s3 = new core\chart_series($s3_t, $s3_d);
+        $c->add_series($s3);
+    }
+    //Now make the form
+    $form->set_data((object)array('diagram'=> $fieldnr));
+    if ($fromform = $form->get_data()){
+        $di = $_POST ['diagram'];
+        $test = 'diagram'.$di;
+        $d_obj->$test = $value;
+        $DB->update_record('disea_diagrams', $d_obj);
+        redirect($url, $di.' Deleted');
+    }
+    array_push($ds,  (object)['d' => $OUTPUT->render_chart($c, false), 'b' => $form->render()]);
+}
