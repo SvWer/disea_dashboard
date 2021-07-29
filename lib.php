@@ -145,7 +145,7 @@ function block_disea_dashboard_get_assignment_grades($course, $students) {
  * @Param string $s3_t [optional] Name of the third series
  * @Param array $s3_d [optional] Data of the third series
  */
-function create_diagram (&$ds, $chart, $title, $labels, $fieldnr, $url, $form, $d_obj, $d_obj_field, $value, $s1_t, $s1_d, $s2_t=NULL, $s2_d=NULL, $s3_t=NULL, $s3_d=NULL) {
+function create_diagram (&$ds, $chart, $title, $labels, $fieldnr, $url, $form, $d_obj, $value, $s1_t, $s1_d, $s2_t=NULL, $s2_d=NULL, $s3_t=NULL, $s3_d=NULL) {
     global $DB, $OUTPUT;
     if($chart === 'bar') {
         $c = new core\chart_bar();

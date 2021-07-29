@@ -90,638 +90,233 @@ for ($i = 0; $i < count($access_weeks_average); $i++) {
     $access_weeks_average[$i] = $access_weeks_average[$i]/count($students);
     $klicks_average[$i] = $klicks_average[$i] / count($students);
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 if($check_diagrams->diagram1 == 0) {
-    // Chart with access to course per week
-    $access_weeks_chart = new core\chart_line();
-    $access_weeks_chart->set_title(get_string('access_weeks_chart_name', 'block_disea_dashboard'));
-    $numbers = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $access_weeks);
-    $access_weeks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $access_weeks_average);
-    $access_weeks_chart->add_series($numbers);
-    $access_weeks_chart->add_series($access_weeks_average_s);
-    $access_weeks_chart->set_labels($access_weeks_label);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 1));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram1 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($access_weeks_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'line', get_string('access_weeks_chart_name', 'block_disea_dashboard'), $access_weeks_label,
+        1, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $access_weeks,
+        get_string('average', 'block_disea_dashboard'), $access_weeks_average);
 }
 /*
  * The following part ist just for test purpose with more diagrams.
  */
 //lines smooth
 if($check_diagrams->diagram11 == 0) {
-    // Chart with access to course per week
-    $access_weeks_chart = new core\chart_line();
-    $access_weeks_chart->set_title(get_string('access_weeks_chart_name', 'block_disea_dashboard'));
-    $numbers = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $access_weeks);
-    $access_weeks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $access_weeks_average);
-    $access_weeks_chart->add_series($numbers);
-    $access_weeks_chart->add_series($access_weeks_average_s);
-    $access_weeks_chart->set_labels($access_weeks_label);
-    $access_weeks_chart->set_smooth(true);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 11));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram11 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($access_weeks_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'smooth', get_string('access_weeks_chart_name', 'block_disea_dashboard'), $access_weeks_label,
+        11, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $access_weeks,
+        get_string('average', 'block_disea_dashboard'), $access_weeks_average);
 }
 //bar
 if($check_diagrams->diagram12 == 0) {
-    // Chart with access to course per week
-    $access_weeks_chart = new core\chart_bar();
-    $access_weeks_chart->set_title(get_string('access_weeks_chart_name', 'block_disea_dashboard'));
-    $numbers = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $access_weeks);
-    $access_weeks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $access_weeks_average);
-    $access_weeks_chart->add_series($numbers);
-    $access_weeks_chart->add_series($access_weeks_average_s);
-    $access_weeks_chart->set_labels($access_weeks_label);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 12));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram12 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($access_weeks_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'bar', get_string('access_weeks_chart_name', 'block_disea_dashboard'), $access_weeks_label,
+        12, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $access_weeks,
+        get_string('average', 'block_disea_dashboard'), $access_weeks_average);
 }
 //stacked bar
 if($check_diagrams->diagram13 == 0) {
-    // Chart with access to course per week
-    $access_weeks_chart = new core\chart_bar();
-    $access_weeks_chart->set_title(get_string('access_weeks_chart_name', 'block_disea_dashboard'));
-    $numbers = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $access_weeks);
-    $access_weeks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $access_weeks_average);
-    $access_weeks_chart->add_series($numbers);
-    $access_weeks_chart->add_series($access_weeks_average_s);
-    $access_weeks_chart->set_labels($access_weeks_label);
-    $access_weeks_chart->set_stacked(true);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 13));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram13 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($access_weeks_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'stacked', get_string('access_weeks_chart_name', 'block_disea_dashboard'), $access_weeks_label,
+        13, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $access_weeks,
+        get_string('average', 'block_disea_dashboard'), $access_weeks_average);
 }
 //horizontal bar
 if($check_diagrams->diagram14 == 0) {
-    // Chart with access to course per week
-    $access_weeks_chart = new core\chart_bar();
-    $access_weeks_chart->set_title(get_string('access_weeks_chart_name', 'block_disea_dashboard'));
-    $numbers = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $access_weeks);
-    $access_weeks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $access_weeks_average);
-    $access_weeks_chart->add_series($numbers);
-    $access_weeks_chart->add_series($access_weeks_average_s);
-    $access_weeks_chart->set_labels($access_weeks_label);
-    $access_weeks_chart->set_horizontal(true);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 14));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram14 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($access_weeks_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'horizontal', get_string('access_weeks_chart_name', 'block_disea_dashboard'), $access_weeks_label,
+        14, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $access_weeks,
+        get_string('average', 'block_disea_dashboard'), $access_weeks_average);
 }
 //pie
 if($check_diagrams->diagram15 == 0) {
-    // Chart with access to course per week
-    $access_weeks_chart = new core\chart_pie();
-    $access_weeks_chart->set_title(get_string('access_weeks_chart_name', 'block_disea_dashboard'));
-    $numbers = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $access_weeks);
-    $access_weeks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $access_weeks_average);
-    $access_weeks_chart->add_series($numbers);
-    //$access_weeks_chart->add_series($access_weeks_average_s);
-    $access_weeks_chart->set_labels($access_weeks_label);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 15));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram15 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($access_weeks_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'pie', get_string('access_weeks_chart_name', 'block_disea_dashboard'), $access_weeks_label,
+        15, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $access_weeks);
 }
-//Doughnut
+//pie average (Doughnut does not makes any sense)
 if($check_diagrams->diagram16 == 0) {
-    // Chart with access to course per week
-    $access_weeks_chart = new core\chart_pie();
-    $access_weeks_chart->set_title(get_string('access_weeks_chart_name', 'block_disea_dashboard'));
-    $numbers = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $access_weeks);
-    $access_weeks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $access_weeks_average);
-    //$access_weeks_chart->add_series($numbers);
-    $access_weeks_chart->add_series($access_weeks_average_s);
-    $access_weeks_chart->set_labels($access_weeks_label);
-    //$access_weeks_chart->set_doughnut(true);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 16));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram16 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($access_weeks_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'pie', get_string('access_weeks_chart_name', 'block_disea_dashboard'), $access_weeks_label,
+        16, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('average', 'block_disea_dashboard'), $access_weeks_average);
 }
-
 
 /*
  * End of test
  */
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 if($check_diagrams->diagram2 == 0) {
-    //Chart with klicks in course per week
-    $klicks_chart = new core\chart_line();
-    $klicks_chart->set_title(get_string('klicks_chart_name', 'block_disea_dashboard'));
-    $klicks_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $klicks);
-    $klicks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $klicks_average);
-    $klicks_chart->add_series($klicks_s);
-    $klicks_chart->add_series($klicks_average_s);
-    $klicks_chart->set_labels($klick_label);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 2));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram2 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($klicks_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'line', get_string('klicks_chart_name', 'block_disea_dashboard'), $klick_label,
+        2, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $klicks,
+        get_string('average', 'block_disea_dashboard'), $klicks_average);
 }
-
 /*
  * Second test block for different diagrams
  */
 //line smooth
 if($check_diagrams->diagram21 == 0) {
-    //Chart with klicks in course per week
-    $klicks_chart = new core\chart_line();
-    $klicks_chart->set_title(get_string('klicks_chart_name', 'block_disea_dashboard'));
-    $klicks_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $klicks);
-    $klicks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $klicks_average);
-    $klicks_chart->add_series($klicks_s);
-    $klicks_chart->add_series($klicks_average_s);
-    $klicks_chart->set_labels($klick_label);
-    $klicks_chart->set_smooth(true);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 21));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram21 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($klicks_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'smooth', get_string('klicks_chart_name', 'block_disea_dashboard'), $klick_label,
+        21, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $klicks,
+        get_string('average', 'block_disea_dashboard'), $klicks_average);
 }
 //bar
 if($check_diagrams->diagram22 == 0) {
-    //Chart with klicks in course per week
-    $klicks_chart = new core\chart_bar();
-    $klicks_chart->set_title(get_string('klicks_chart_name', 'block_disea_dashboard'));
-    $klicks_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $klicks);
-    $klicks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $klicks_average);
-    $klicks_chart->add_series($klicks_s);
-    $klicks_chart->add_series($klicks_average_s);
-    $klicks_chart->set_labels($klick_label);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 22));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram22 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($klicks_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'bar', get_string('klicks_chart_name', 'block_disea_dashboard'), $klick_label,
+        22, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $klicks,
+        get_string('average', 'block_disea_dashboard'), $klicks_average);
 }
 //bar stacked
 if($check_diagrams->diagram23 == 0) {
-    //Chart with klicks in course per week
-    $klicks_chart = new core\chart_bar();
-    $klicks_chart->set_title(get_string('klicks_chart_name', 'block_disea_dashboard'));
-    $klicks_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $klicks);
-    $klicks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $klicks_average);
-    $klicks_chart->add_series($klicks_s);
-    $klicks_chart->add_series($klicks_average_s);
-    $klicks_chart->set_labels($klick_label);
-    $klicks_chart->set_stacked(true);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 23));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram23 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($klicks_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'stacked', get_string('klicks_chart_name', 'block_disea_dashboard'), $klick_label,
+        23, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $klicks,
+        get_string('average', 'block_disea_dashboard'), $klicks_average);
 }
 //bar horizontal
 if($check_diagrams->diagram24 == 0) {
-    //Chart with klicks in course per week
-    $klicks_chart = new core\chart_bar();
-    $klicks_chart->set_title(get_string('klicks_chart_name', 'block_disea_dashboard'));
-    $klicks_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $klicks);
-    $klicks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $klicks_average);
-    $klicks_chart->add_series($klicks_s);
-    $klicks_chart->add_series($klicks_average_s);
-    $klicks_chart->set_labels($klick_label);
-    $klicks_chart->set_horizontal(true);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 24));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram24 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($klicks_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'horizontal', get_string('klicks_chart_name', 'block_disea_dashboard'), $klick_label,
+        24, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $klicks,
+        get_string('average', 'block_disea_dashboard'), $klicks_average);
 }
 //pie
-//bar horizontal
 if($check_diagrams->diagram25 == 0) {
-    //Chart with klicks in course per week
-    $klicks_chart = new core\chart_pie();
-    $klicks_chart->set_title(get_string('klicks_chart_name', 'block_disea_dashboard'));
-    $klicks_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $klicks);
-    $klicks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $klicks_average);
-    $klicks_chart->add_series($klicks_s);
-    //$klicks_chart->add_series($klicks_average_s);
-    $klicks_chart->set_labels($klick_label);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 25));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram25 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($klicks_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'pie', get_string('klicks_chart_name', 'block_disea_dashboard'), $klick_label,
+        25, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $klicks);
 }
-//doughnut
-//bar horizontal
+//pie average (doughnut does not make sense)
 if($check_diagrams->diagram26 == 0) {
-    //Chart with klicks in course per week
-    $klicks_chart = new core\chart_pie();
-    $klicks_chart->set_title(get_string('klicks_chart_name', 'block_disea_dashboard'));
-    $klicks_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $klicks);
-    $klicks_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $klicks_average);
-    //$klicks_chart->add_series($klicks_s);
-    $klicks_chart->add_series($klicks_average_s);
-    $klicks_chart->set_labels($klick_label);
-    //$klicks_chart->set_doughnut(true);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 26));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram26 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($klicks_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'pie', get_string('klicks_chart_name', 'block_disea_dashboard'), $klick_label,
+        26, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $klicks);
 }
 
 /*
  * End Test 2
  */
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+/* Get the number of modules accessed by week */
+$accessresults = block_disea_dashboard_get_number_of_modules_access_by_week($courseid, $students, $startdate);
+
+// Chart with days of access of modules per week
+$module_access = array_fill('0', $maxnumberofweeks+1, 0);
+$module_access_label = range('0', $maxnumberofweeks);
+$module_access_average = array_fill('0', $maxnumberofweeks+1, 0);
+foreach ($accessresults as $tuple) {
+    if($tuple->userid === $USER->id) {
+        $module_access[$tuple->week] = intval($tuple->number);
+    }
+    $module_access_average[$tuple->week] = $module_access_average[$tuple->week] + intval($tuple->number);
+}
+
+for ($i = 0; $i < count($module_access_average); $i++) {
+    $module_access_average[$i] = $module_access_average[$i]/count($students);
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Normal diagram line 3
 if($check_diagrams->diagram3 == 0) {
-    /* Get the number of modules accessed by week */
-    $accessresults = block_disea_dashboard_get_number_of_modules_access_by_week($courseid, $students, $startdate);
-    
-    // Chart with days of access of modules per week
-    $module_access = array_fill('0', $maxnumberofweeks+1, 0);
-    $module_access_label = range('0', $maxnumberofweeks);
-    $module_access_average = array_fill('0', $maxnumberofweeks+1, 0);
-    foreach ($accessresults as $tuple) {
-        if($tuple->userid === $USER->id) {
-            $module_access[$tuple->week] = intval($tuple->number);
-        }
-        $module_access_average[$tuple->week] = $module_access_average[$tuple->week] + intval($tuple->number);
-    }
-    
-    for ($i = 0; $i < count($module_access_average); $i++) {
-        $module_access_average[$i] = $module_access_average[$i]/count($students);
-    }
-    
-    $module_access_chart = new core\chart_line();
-    $module_access_chart->set_title(get_string('module_access_chart_name', 'block_disea_dashboard'));
-    $module_access_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $module_access);
-    $module_access_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $module_access_average);
-    $module_access_chart->add_series($module_access_s);
-    $module_access_chart->add_series($module_access_average_s);
-    $module_access_chart->set_labels($module_access_label);
-    $mform = new add_diagram_form($dashurl);
-    $mform->set_data((object)array('diagram'=> 3));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram3 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($module_access_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'line', get_string('module_access_chart_name', 'block_disea_dashboard'), $module_access_label,
+        3, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $module_access,
+        get_string('average', 'block_disea_dashboard'), $module_access_average);
 }
 /*
  * Third test block
  */
 //line smooth
 if($check_diagrams->diagram31 == 0) {
-    /* Get the number of modules accessed by week */
-    $accessresults = block_disea_dashboard_get_number_of_modules_access_by_week($courseid, $students, $startdate);
-    
-    // Chart with days of access of modules per week
-    $module_access = array_fill('0', $maxnumberofweeks+1, 0);
-    $module_access_label = range('0', $maxnumberofweeks);
-    $module_access_average = array_fill('0', $maxnumberofweeks+1, 0);
-    foreach ($accessresults as $tuple) {
-        if($tuple->userid === $USER->id) {
-            $module_access[$tuple->week] = intval($tuple->number);
-        }
-        $module_access_average[$tuple->week] = $module_access_average[$tuple->week] + intval($tuple->number);
-    }
-    
-    for ($i = 0; $i < count($module_access_average); $i++) {
-        $module_access_average[$i] = $module_access_average[$i]/count($students);
-    }
-    
-    $module_access_chart = new core\chart_line();
-    $module_access_chart->set_title(get_string('module_access_chart_name', 'block_disea_dashboard'));
-    $module_access_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $module_access);
-    $module_access_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $module_access_average);
-    $module_access_chart->add_series($module_access_s);
-    $module_access_chart->add_series($module_access_average_s);
-    $module_access_chart->set_labels($module_access_label);
-    $module_access_chart->set_smooth(true);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 31));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram31 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($module_access_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'smooth', get_string('module_access_chart_name', 'block_disea_dashboard'), $module_access_label,
+        31, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $module_access,
+        get_string('average', 'block_disea_dashboard'), $module_access_average);
 }
 //bar
 if($check_diagrams->diagram32 == 0) {
-    /* Get the number of modules accessed by week */
-    $accessresults = block_disea_dashboard_get_number_of_modules_access_by_week($courseid, $students, $startdate);
-    
-    // Chart with days of access of modules per week
-    $module_access = array_fill('0', $maxnumberofweeks+1, 0);
-    $module_access_label = range('0', $maxnumberofweeks);
-    $module_access_average = array_fill('0', $maxnumberofweeks+1, 0);
-    foreach ($accessresults as $tuple) {
-        if($tuple->userid === $USER->id) {
-            $module_access[$tuple->week] = intval($tuple->number);
-        }
-        $module_access_average[$tuple->week] = $module_access_average[$tuple->week] + intval($tuple->number);
-    }
-    
-    for ($i = 0; $i < count($module_access_average); $i++) {
-        $module_access_average[$i] = $module_access_average[$i]/count($students);
-    }
-    
-    $module_access_chart = new core\chart_bar();
-    $module_access_chart->set_title(get_string('module_access_chart_name', 'block_disea_dashboard'));
-    $module_access_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $module_access);
-    $module_access_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $module_access_average);
-    $module_access_chart->add_series($module_access_s);
-    $module_access_chart->add_series($module_access_average_s);
-    $module_access_chart->set_labels($module_access_label);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 32));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram32 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($module_access_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'bar', get_string('module_access_chart_name', 'block_disea_dashboard'), $module_access_label,
+        32, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $module_access,
+        get_string('average', 'block_disea_dashboard'), $module_access_average);
 }
 //bar stacked
 if($check_diagrams->diagram33 == 0) {
-    /* Get the number of modules accessed by week */
-    $accessresults = block_disea_dashboard_get_number_of_modules_access_by_week($courseid, $students, $startdate);
-    
-    // Chart with days of access of modules per week
-    $module_access = array_fill('0', $maxnumberofweeks+1, 0);
-    $module_access_label = range('0', $maxnumberofweeks);
-    $module_access_average = array_fill('0', $maxnumberofweeks+1, 0);
-    foreach ($accessresults as $tuple) {
-        if($tuple->userid === $USER->id) {
-            $module_access[$tuple->week] = intval($tuple->number);
-        }
-        $module_access_average[$tuple->week] = $module_access_average[$tuple->week] + intval($tuple->number);
-    }
-    
-    for ($i = 0; $i < count($module_access_average); $i++) {
-        $module_access_average[$i] = $module_access_average[$i]/count($students);
-    }
-    
-    $module_access_chart = new core\chart_bar();
-    $module_access_chart->set_title(get_string('module_access_chart_name', 'block_disea_dashboard'));
-    $module_access_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $module_access);
-    $module_access_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $module_access_average);
-    $module_access_chart->add_series($module_access_s);
-    $module_access_chart->add_series($module_access_average_s);
-    $module_access_chart->set_labels($module_access_label);
-    $module_access_chart->set_stacked(true);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 33));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram33 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($module_access_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'stacked', get_string('module_access_chart_name', 'block_disea_dashboard'), $module_access_label,
+        33, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $module_access,
+        get_string('average', 'block_disea_dashboard'), $module_access_average);
 }
-//bar
+//bar horizontal
 if($check_diagrams->diagram34 == 0) {
-    /* Get the number of modules accessed by week */
-    $accessresults = block_disea_dashboard_get_number_of_modules_access_by_week($courseid, $students, $startdate);
-    
-    // Chart with days of access of modules per week
-    $module_access = array_fill('0', $maxnumberofweeks+1, 0);
-    $module_access_label = range('0', $maxnumberofweeks);
-    $module_access_average = array_fill('0', $maxnumberofweeks+1, 0);
-    foreach ($accessresults as $tuple) {
-        if($tuple->userid === $USER->id) {
-            $module_access[$tuple->week] = intval($tuple->number);
-        }
-        $module_access_average[$tuple->week] = $module_access_average[$tuple->week] + intval($tuple->number);
-    }
-    
-    for ($i = 0; $i < count($module_access_average); $i++) {
-        $module_access_average[$i] = $module_access_average[$i]/count($students);
-    }
-    
-    $module_access_chart = new core\chart_bar();
-    $module_access_chart->set_title(get_string('module_access_chart_name', 'block_disea_dashboard'));
-    $module_access_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $module_access);
-    $module_access_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $module_access_average);
-    $module_access_chart->add_series($module_access_s);
-    $module_access_chart->add_series($module_access_average_s);
-    $module_access_chart->set_labels($module_access_label);
-    $module_access_chart->set_horizontal(true);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 34));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram34 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($module_access_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'horizontal', get_string('module_access_chart_name', 'block_disea_dashboard'), $module_access_label,
+        34, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $module_access,
+        get_string('average', 'block_disea_dashboard'), $module_access_average);
 }
 //pie
 if($check_diagrams->diagram35 == 0) {
-    /* Get the number of modules accessed by week */
-    $accessresults = block_disea_dashboard_get_number_of_modules_access_by_week($courseid, $students, $startdate);
-    
-    // Chart with days of access of modules per week
-    $module_access = array_fill('0', $maxnumberofweeks+1, 0);
-    $module_access_label = range('0', $maxnumberofweeks);
-    $module_access_average = array_fill('0', $maxnumberofweeks+1, 0);
-    foreach ($accessresults as $tuple) {
-        if($tuple->userid === $USER->id) {
-            $module_access[$tuple->week] = intval($tuple->number);
-        }
-        $module_access_average[$tuple->week] = $module_access_average[$tuple->week] + intval($tuple->number);
-    }
-    
-    for ($i = 0; $i < count($module_access_average); $i++) {
-        $module_access_average[$i] = $module_access_average[$i]/count($students);
-    }
-    
-    $module_access_chart = new core\chart_pie();
-    $module_access_chart->set_title(get_string('module_access_chart_name', 'block_disea_dashboard'));
-    $module_access_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $module_access);
-    $module_access_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $module_access_average);
-    $module_access_chart->add_series($module_access_s);
-    //$module_access_chart->add_series($module_access_average_s);
-    $module_access_chart->set_labels($module_access_label);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 35));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram35 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($module_access_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'pie', get_string('module_access_chart_name', 'block_disea_dashboard'), $module_access_label,
+        35, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $module_access);
 }
-//doughnut
+//pie average (doughnut does not make sense)
 if($check_diagrams->diagram36 == 0) {
-    /* Get the number of modules accessed by week */
-    $accessresults = block_disea_dashboard_get_number_of_modules_access_by_week($courseid, $students, $startdate);
-    
-    // Chart with days of access of modules per week
-    $module_access = array_fill('0', $maxnumberofweeks+1, 0);
-    $module_access_label = range('0', $maxnumberofweeks);
-    $module_access_average = array_fill('0', $maxnumberofweeks+1, 0);
-    foreach ($accessresults as $tuple) {
-        if($tuple->userid === $USER->id) {
-            $module_access[$tuple->week] = intval($tuple->number);
-        }
-        $module_access_average[$tuple->week] = $module_access_average[$tuple->week] + intval($tuple->number);
-    }
-    
-    for ($i = 0; $i < count($module_access_average); $i++) {
-        $module_access_average[$i] = $module_access_average[$i]/count($students);
-    }
-    
-    $module_access_chart = new core\chart_pie();
-    $module_access_chart->set_title(get_string('module_access_chart_name', 'block_disea_dashboard'));
-    $module_access_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $module_access);
-    $module_access_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $module_access_average);
-    //$module_access_chart->add_series($module_access_s);
-    $module_access_chart->add_series($module_access_average_s);
-    $module_access_chart->set_labels($module_access_label);
-    //$module_access_chart->set_doughnut(true);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 36));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram36 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($module_access_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'pie', get_string('module_access_chart_name', 'block_disea_dashboard'), $module_access_label,
+        36, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('average', 'block_disea_dashboard'), $module_access_average);
 }
-
 /*
  * Ende test 3
  */
 
-if($check_diagrams->diagram4 == 0) {
-    //Chart for assignenment grades
-    $assign_grades = block_disea_dashboard_get_assignment_grades($courseid, $students);
-    
-    $diffquizzes = array_unique(array_map(function ($i) { return $i->name; }, $assign_grades));
-    $numberquizzes = count($diffquizzes);
-    
-    $max_pos_points = array_fill(0, $numberquizzes, 0);
-    $assignment_average = array_fill(0, $numberquizzes, 0);
-    $assignment_my = array_fill(0, $numberquizzes, 0);
-    $succeded_assignments = array_fill(0, $numberquizzes, 0);
-    $assignment_name = array();
-    
-    
-    foreach ($assign_grades as $tuple) {
-        if(in_array($tuple->name, $assignment_name)) {
-            $index = array_search($tuple->name, $assignment_name);
-            $assignment_average[$index] = $assignment_average[$index] + $tuple->points;
-            $succeded_assignments[$index] += 1;
-            if($tuple->userid === $USER->id) {
-                $assignment_my[$index] = $tuple->points;
-            }
-        } else {
-            array_push($assignment_name, $tuple->name);
-            $index = array_search($tuple->name, $assignment_name);
-            $max_pos_points[$index] = $tuple->maxpoints;
-            $assignment_average[$index] = $tuple->points;
-            $succeded_assignments[$index] += 1;
-            if($tuple->userid === $USER->id) {
-                $assignment_my[$index] = $tuple->points;
-            }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Chart for assignenment grades
+$assign_grades = block_disea_dashboard_get_assignment_grades($courseid, $students);
+
+$diffquizzes = array_unique(array_map(function ($i) { return $i->name; }, $assign_grades));
+$numberquizzes = count($diffquizzes);
+
+$max_pos_points = array_fill(0, $numberquizzes, 0);
+$assignment_average = array_fill(0, $numberquizzes, 0);
+$assignment_my = array_fill(0, $numberquizzes, 0);
+$succeded_assignments = array_fill(0, $numberquizzes, 0);
+$assignment_name = array();
+
+
+foreach ($assign_grades as $tuple) {
+    if(in_array($tuple->name, $assignment_name)) {
+        $index = array_search($tuple->name, $assignment_name);
+        $assignment_average[$index] = $assignment_average[$index] + $tuple->points;
+        $succeded_assignments[$index] += 1;
+        if($tuple->userid === $USER->id) {
+            $assignment_my[$index] = $tuple->points;
+        }
+    } else {
+        array_push($assignment_name, $tuple->name);
+        $index = array_search($tuple->name, $assignment_name);
+        $max_pos_points[$index] = $tuple->maxpoints;
+        $assignment_average[$index] = $tuple->points;
+        $succeded_assignments[$index] += 1;
+        if($tuple->userid === $USER->id) {
+            $assignment_my[$index] = $tuple->points;
         }
     }
-    for ($i = 0; $i < count($assignment_average); $i++) {
-        $assignment_average[$i] = $assignment_average[$i]/$succeded_assignments[$i];
-    }
-    
-    $assignment_chart = new core\chart_bar();
-    $assignment_chart->set_title(get_string('assignment_chart_name', 'block_disea_dashboard'));
-    $assignment_my_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $assignment_my);
-    $assignment_chart->add_series($assignment_my_s);
-    $assignment_max_s = new core\chart_series(get_string('assignment_max', 'block_disea_dashboard'), $max_pos_points);
-    $assignment_chart->add_series($assignment_max_s);
-    $assignment_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $assignment_average);
-    $assignment_chart->add_series($assignment_average_s);
-    $assignment_chart->set_labels($assignment_name);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 4));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram4 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($assignment_chart, false), 'b' => $mform->render()]);
+}
+for ($i = 0; $i < count($assignment_average); $i++) {
+    $assignment_average[$i] = $assignment_average[$i]/$succeded_assignments[$i];
+}
+//Normal diagram bar
+if($check_diagrams->diagram4 == 0) {
+    create_diagram($diagrams, 'bar', get_string('assignment_chart_name', 'block_disea_dashboard'), $assignment_name,
+        4, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $assignment_my,
+        get_string('assignment_max', 'block_disea_dashboard'), $max_pos_points,
+        get_string('average', 'block_disea_dashboard'), $assignment_average);
 }
 
 /*
@@ -729,236 +324,36 @@ if($check_diagrams->diagram4 == 0) {
  */
 //line chart
 if($check_diagrams->diagram41 == 0) {
-    //Chart for assignenment grades
-    $assign_grades = block_disea_dashboard_get_assignment_grades($courseid, $students);
-    
-    $diffquizzes = array_unique(array_map(function ($i) { return $i->name; }, $assign_grades));
-    $numberquizzes = count($diffquizzes);
-    
-    $max_pos_points = array_fill(0, $numberquizzes, 0);
-    $assignment_average = array_fill(0, $numberquizzes, 0);
-    $assignment_my = array_fill(0, $numberquizzes, 0);
-    $succeded_assignments = array_fill(0, $numberquizzes, 0);
-    $assignment_name = array();
-    
-    
-    foreach ($assign_grades as $tuple) {
-        if(in_array($tuple->name, $assignment_name)) {
-            $index = array_search($tuple->name, $assignment_name);
-            $assignment_average[$index] = $assignment_average[$index] + $tuple->points;
-            $succeded_assignments[$index] += 1;
-            if($tuple->userid === $USER->id) {
-                $assignment_my[$index] = $tuple->points;
-            }
-        } else {
-            array_push($assignment_name, $tuple->name);
-            $index = array_search($tuple->name, $assignment_name);
-            $max_pos_points[$index] = $tuple->maxpoints;
-            $assignment_average[$index] = $tuple->points;
-            $succeded_assignments[$index] += 1;
-            if($tuple->userid === $USER->id) {
-                $assignment_my[$index] = $tuple->points;
-            }
-        }
-    }
-    for ($i = 0; $i < count($assignment_average); $i++) {
-        $assignment_average[$i] = $assignment_average[$i]/$succeded_assignments[$i];
-    }
-    
-    $assignment_chart = new core\chart_line();
-    $assignment_chart->set_title(get_string('assignment_chart_name', 'block_disea_dashboard'));
-    $assignment_my_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $assignment_my);
-    $assignment_chart->add_series($assignment_my_s);
-    $assignment_max_s = new core\chart_series(get_string('assignment_max', 'block_disea_dashboard'), $max_pos_points);
-    $assignment_chart->add_series($assignment_max_s);
-    $assignment_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $assignment_average);
-    $assignment_chart->add_series($assignment_average_s);
-    $assignment_chart->set_labels($assignment_name);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 41));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram41 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($assignment_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'line', get_string('assignment_chart_name', 'block_disea_dashboard'), $assignment_name,
+        41, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $assignment_my,
+        get_string('assignment_max', 'block_disea_dashboard'), $max_pos_points,
+        get_string('average', 'block_disea_dashboard'), $assignment_average);
 }
 //lines smooth
 if($check_diagrams->diagram42 == 0) {
-    //Chart for assignenment grades
-    $assign_grades = block_disea_dashboard_get_assignment_grades($courseid, $students);
-    
-    $diffquizzes = array_unique(array_map(function ($i) { return $i->name; }, $assign_grades));
-    $numberquizzes = count($diffquizzes);
-    
-    $max_pos_points = array_fill(0, $numberquizzes, 0);
-    $assignment_average = array_fill(0, $numberquizzes, 0);
-    $assignment_my = array_fill(0, $numberquizzes, 0);
-    $succeded_assignments = array_fill(0, $numberquizzes, 0);
-    $assignment_name = array();
-    
-    
-    foreach ($assign_grades as $tuple) {
-        if(in_array($tuple->name, $assignment_name)) {
-            $index = array_search($tuple->name, $assignment_name);
-            $assignment_average[$index] = $assignment_average[$index] + $tuple->points;
-            $succeded_assignments[$index] += 1;
-            if($tuple->userid === $USER->id) {
-                $assignment_my[$index] = $tuple->points;
-            }
-        } else {
-            array_push($assignment_name, $tuple->name);
-            $index = array_search($tuple->name, $assignment_name);
-            $max_pos_points[$index] = $tuple->maxpoints;
-            $assignment_average[$index] = $tuple->points;
-            $succeded_assignments[$index] += 1;
-            if($tuple->userid === $USER->id) {
-                $assignment_my[$index] = $tuple->points;
-            }
-        }
-    }
-    for ($i = 0; $i < count($assignment_average); $i++) {
-        $assignment_average[$i] = $assignment_average[$i]/$succeded_assignments[$i];
-    }
-    
-    $assignment_chart = new core\chart_line();
-    $assignment_chart->set_title(get_string('assignment_chart_name', 'block_disea_dashboard'));
-    $assignment_my_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $assignment_my);
-    $assignment_chart->add_series($assignment_my_s);
-    $assignment_max_s = new core\chart_series(get_string('assignment_max', 'block_disea_dashboard'), $max_pos_points);
-    $assignment_chart->add_series($assignment_max_s);
-    $assignment_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $assignment_average);
-    $assignment_chart->add_series($assignment_average_s);
-    $assignment_chart->set_labels($assignment_name);
-    $assignment_chart->set_smooth(true);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 42));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram42 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($assignment_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'smooth', get_string('assignment_chart_name', 'block_disea_dashboard'), $assignment_name,
+        42, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $assignment_my,
+        get_string('assignment_max', 'block_disea_dashboard'), $max_pos_points,
+        get_string('average', 'block_disea_dashboard'), $assignment_average);
 }
 //bar stacked
 if($check_diagrams->diagram43 == 0) {
-    //Chart for assignenment grades
-    $assign_grades = block_disea_dashboard_get_assignment_grades($courseid, $students);
-    
-    $diffquizzes = array_unique(array_map(function ($i) { return $i->name; }, $assign_grades));
-    $numberquizzes = count($diffquizzes);
-    
-    $max_pos_points = array_fill(0, $numberquizzes, 0);
-    $assignment_average = array_fill(0, $numberquizzes, 0);
-    $assignment_my = array_fill(0, $numberquizzes, 0);
-    $succeded_assignments = array_fill(0, $numberquizzes, 0);
-    $assignment_name = array();
-    
-    
-    foreach ($assign_grades as $tuple) {
-        if(in_array($tuple->name, $assignment_name)) {
-            $index = array_search($tuple->name, $assignment_name);
-            $assignment_average[$index] = $assignment_average[$index] + $tuple->points;
-            $succeded_assignments[$index] += 1;
-            if($tuple->userid === $USER->id) {
-                $assignment_my[$index] = $tuple->points;
-            }
-        } else {
-            array_push($assignment_name, $tuple->name);
-            $index = array_search($tuple->name, $assignment_name);
-            $max_pos_points[$index] = $tuple->maxpoints;
-            $assignment_average[$index] = $tuple->points;
-            $succeded_assignments[$index] += 1;
-            if($tuple->userid === $USER->id) {
-                $assignment_my[$index] = $tuple->points;
-            }
-        }
-    }
-    for ($i = 0; $i < count($assignment_average); $i++) {
-        $assignment_average[$i] = $assignment_average[$i]/$succeded_assignments[$i];
-    }
-    
-    $assignment_chart = new core\chart_bar();
-    $assignment_chart->set_title(get_string('assignment_chart_name', 'block_disea_dashboard'));
-    $assignment_my_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $assignment_my);
-    $assignment_chart->add_series($assignment_my_s);
-    $assignment_max_s = new core\chart_series(get_string('assignment_max', 'block_disea_dashboard'), $max_pos_points);
-    $assignment_chart->add_series($assignment_max_s);
-    $assignment_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $assignment_average);
-    $assignment_chart->add_series($assignment_average_s);
-    $assignment_chart->set_labels($assignment_name);
-    $assignment_chart->set_stacked(true);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 43));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram43 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($assignment_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'stacked', get_string('assignment_chart_name', 'block_disea_dashboard'), $assignment_name,
+        43, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $assignment_my,
+        get_string('assignment_max', 'block_disea_dashboard'), $max_pos_points,
+        get_string('average', 'block_disea_dashboard'), $assignment_average);
 }
 //bar horizontal
 if($check_diagrams->diagram44 == 0) {
-    //Chart for assignenment grades
-    $assign_grades = block_disea_dashboard_get_assignment_grades($courseid, $students);
-    
-    $diffquizzes = array_unique(array_map(function ($i) { return $i->name; }, $assign_grades));
-    $numberquizzes = count($diffquizzes);
-    
-    $max_pos_points = array_fill(0, $numberquizzes, 0);
-    $assignment_average = array_fill(0, $numberquizzes, 0);
-    $assignment_my = array_fill(0, $numberquizzes, 0);
-    $succeded_assignments = array_fill(0, $numberquizzes, 0);
-    $assignment_name = array();
-    
-    
-    foreach ($assign_grades as $tuple) {
-        if(in_array($tuple->name, $assignment_name)) {
-            $index = array_search($tuple->name, $assignment_name);
-            $assignment_average[$index] = $assignment_average[$index] + $tuple->points;
-            $succeded_assignments[$index] += 1;
-            if($tuple->userid === $USER->id) {
-                $assignment_my[$index] = $tuple->points;
-            }
-        } else {
-            array_push($assignment_name, $tuple->name);
-            $index = array_search($tuple->name, $assignment_name);
-            $max_pos_points[$index] = $tuple->maxpoints;
-            $assignment_average[$index] = $tuple->points;
-            $succeded_assignments[$index] += 1;
-            if($tuple->userid === $USER->id) {
-                $assignment_my[$index] = $tuple->points;
-            }
-        }
-    }
-    for ($i = 0; $i < count($assignment_average); $i++) {
-        $assignment_average[$i] = $assignment_average[$i]/$succeded_assignments[$i];
-    }
-    
-    $assignment_chart = new core\chart_bar();
-    $assignment_chart->set_title(get_string('assignment_chart_name', 'block_disea_dashboard'));
-    $assignment_my_s = new core\chart_series(get_string('my_own', 'block_disea_dashboard'), $assignment_my);
-    $assignment_chart->add_series($assignment_my_s);
-    $assignment_max_s = new core\chart_series(get_string('assignment_max', 'block_disea_dashboard'), $max_pos_points);
-    $assignment_chart->add_series($assignment_max_s);
-    $assignment_average_s = new core\chart_series(get_string('average', 'block_disea_dashboard'), $assignment_average);
-    $assignment_chart->add_series($assignment_average_s);
-    $assignment_chart->set_labels($assignment_name);
-    $assignment_chart->set_horizontal(true);
-    $mform = new add_diagram_form($thisurl);
-    $mform->set_data((object)array('diagram'=> 44));
-    if ($fromform = $mform->get_data()){
-        $di = $_POST ['diagram'];
-        $check_diagrams->diagram44 = 1;
-        $DB->update_record('disea_diagrams', $check_diagrams);
-        redirect($dashurl);
-    }
-    array_push($diagrams,  (object)['d' => $OUTPUT->render_chart($assignment_chart, false), 'b' => $mform->render()]);
+    create_diagram($diagrams, 'horizontal', get_string('assignment_chart_name', 'block_disea_dashboard'), $assignment_name,
+        44, $dashurl, new add_diagram_form($thisurl), $check_diagrams, 1,
+        get_string('my_own', 'block_disea_dashboard'), $assignment_my,
+        get_string('assignment_max', 'block_disea_dashboard'), $max_pos_points,
+        get_string('average', 'block_disea_dashboard'), $assignment_average);
 }
-
 /*
  * End of testblock 4: assignment grades
  */
